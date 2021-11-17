@@ -20,7 +20,16 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 0) {
     </select>
     <input type="text" name="title" required placeholder="Наименование продукта" autocomplete="off">
     <textarea class="form-options-area" name="description" cols="30" rows="10" placeholder="Описание продукта" required autocomplete="off"></textarea>
-    <input type="text" name="vendor" required placeholder="Производитель" autocomplete="off">
+    <select class="form-options" name="vendor-type">
+    <?
+    $result = $db->getRowsInDb("vendors");
+    foreach ($result as $value) {
+        ?>
+        <option value="<?echo $value['id'];?>"><?echo $value['name'];?></option>
+        <?
+    }
+    ?>
+    </select>
     <input type="text" name="price" required placeholder="Цена" autocomplete="off">
     <input type="file" name="image" required accept=".png, .jpg, .jpeg">
     <input type="submit" name="submit" value="Добавить">

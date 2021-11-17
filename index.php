@@ -5,29 +5,31 @@ require_once('theme.php');
 $db = new dbController();
 $result = $db->getRowsInDb("products");
 ?>
-<div id="items">
-    <?/*
-    foreach ($result as $item) {
-        */?><!--
-        <div class="item">
-            <img src="<?/*echo $item['img'];*/?>" alt="" width="200px">
-            <div class="title"><?/*echo $item['title'];*/?></div>
-            <div class="description"><?/*echo $item['description'];*/?></div>
-            <div class="price"><?/*echo $item['price'];*/?></div>
+<div class="items-controll">
+    <div class="sort-controll">
+        <div class="sort">
+            Сортировка:
+            <select name="sort-by-price" id="sort-by-price">
+                <option value="price-down" selected="selected">Сначала недорогие</option>
+                <option value="price-up">Сначала дорогие</option>
+                <option value="rate-up">Сначала с лучшей оценкой</option>
+                <option value="rate-down">Сначала с худшей оценкой</option>
+            </select>
         </div>
-        --><?/*
-    }
-    */?>
+    </div>
+    <div id="items"></div>
 </div>
+
 <script>
+    var json = '';
     $.ajax({
         method: "POST",
         url: "getProducts.php",
         success(data) {
-            var json = JSON.parse(data, false);
+            json = JSON.parse(data, false);
             sortData(json, "down", "price");
-            json = filterByVendor(json, ['amd','intel']);
-            console.log(json);
+            /*son = filterByVendor(json, ['amd','intel']);
+            console.log(json);*/
             drawNewData(json);
         }
     });
@@ -71,16 +73,26 @@ $result = $db->getRowsInDb("products");
         var items = document.getElementById('items');
         var result = '';
         for (var i = 0; i < data.length; i++) {
-            result += "<div class='item'>";
-            result += "<img src="+data[i].img+" width='200px'>";
-            result += "<div class='title'>"+ data[i].title +"</div>";
-            result += "<div class='description'>"+ data[i].description +"</div>";
-            result += "<div class='vendor'>"+ data[i].vendor +"</div>";
-            result += "<div class='price'>"+ data[i].price +"</div>";
+            result += "<div class='item' id='"+ data[i].id +"'>";
+            console.log(data[i].img);
+            result += "<img src="+data[i].img+" width='150px'>";
+            result += "<div class='item-title'>"+ data[i].title +"</div>";
+            //result += "<div class='description'>"+ data[i].description +"</div>";
+            //result += "<div class='item-vendor'>"+ data[i].vendor +"</div>";
+            result += "<div class='item-price'>"+ data[i].price +" руб.</div>";
             result += "</div>";
         }
         items.innerHTML = result;
     }
+
+    const selectPrice = document.querySelector('#sort-by-price');
+
+    selectPrice.addEventListener("change", function() {
+        const element = document.querySelector('#sort-by-price');
+        const split = element.value.split("-");
+        sortData(json, split[1], split[0]);
+        drawNewData(json);
+    });
 
 </script>
 </body>

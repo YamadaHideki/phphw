@@ -56,7 +56,7 @@ class dbController {
             $checkType->execute([$type]);
             $result = $checkType->fetch(PDO::FETCH_ASSOC);
             if ($result['count(*)'] > 0) {
-                $sql = "INSERT INTO products (product_type, title, description, vendor, img, price) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO products (product_type_id, title, description, vendor_type_id, img, price) VALUES (?, ?, ?, ?, ?, ?)";
                 $query = $this->PDO->prepare($sql);
                 $query->execute([$type, $title, $description, $vendor, $img, $price]);
             }
