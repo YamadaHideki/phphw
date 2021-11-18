@@ -65,6 +65,16 @@ class dbController {
         }
     }
 
+    public function updateItem($id, $type, $title, $description, $vendor, $price, $img) {
+        try {
+            $update = $this->PDO->prepare("UPDATE products SET product_type_id = ?, title = ?, description = ?,
+                                                    vendor_type_id = ?, img = ?, price = ? WHERE id = ?");
+            $update->execute([$type, $title, $description, $vendor, $img, $price, $id]);
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
     public function getFormTableToId($table, $id) {
         try {
             $query = $this->PDO->prepare("SELECT name FROM $table WHERE id = ?");

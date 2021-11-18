@@ -62,12 +62,12 @@ $result = $db->getRowsInDb("products");
                     data.sort((a, b) => a.price - b.price);
                 }
                 break;
-            case 'star':
+            case 'rate':
                 if (upDown === "up") {
-                    data.sort((a, b) => b.star - a.star);
+                    data.sort((a, b) => b.rate - a.rate);
                 }
                 if (upDown === "down") {
-                    data.sort((a, b) => a.star - b.star);
+                    data.sort((a, b) => a.rate - b.rate);
                 }
                 break;
         }
@@ -85,21 +85,20 @@ $result = $db->getRowsInDb("products");
         })
     }
 
-
-
     function drawNewData(data) {
         var items = document.getElementById('items');
         var result = '';
         for (var i = 0; i < data.length; i++) {
             result += "<a class='item-href' href='/item-info.php?id=" + data[i].id + "'><div class='item' id='"+ data[i].id + "'>";
-            console.log(data[i].img);
             result += "<div class='item-img'><img src="+data[i].img+" width='150px'></div>";
-            result += "<div class='item-title'>"+ data[i].title +"</div>";
-            //result += "<div class='description'>"+ data[i].description +"</div>";
+            result += "<div class='item-m-options'>";
+            result += "<div class='item-title'>" + data[i].product_type_name + ": " + data[i].title +"</div>";
+            result += "<div class='item-vendor'>Производитель: " + data[i].vendor_name + "</div>";
+            result += "</div>";
             result += "<div class='item-vendor' hidden>"+ data[i].vendor_type_id +"</div>";
             result += "<div class='item-r-options'>";
             result += "<div class='item-price'>"+ data[i].price + " руб.</div>";
-            result += "<div class='item-rate'>"+ data[i].rate + "</div>";
+            result += "<div class='item-rate'>Сред. оценка: "+ data[i].rate + "</div>";
             result += "</div>";
             result += "</div></a>";
         }
@@ -124,26 +123,12 @@ $result = $db->getRowsInDb("products");
         });
     });
 
-
     selectPrice.addEventListener("change", function() {
         const element = document.querySelector('#sort-by-price');
         sortSettings = element.value.split("-");
         sortData(filteredData, sortSettings[1], sortSettings[0]);
         drawNewData(filteredData);
     });
-
-    $(function(){
-        $('.item').on('click', function(e){
-            console.log(1);
-            console.log(e);
-        });
-    });
-
-
-    document.getElementsByClassName('item').onclick = function(e) {
-        console.log(e);
-        //window.location.href = 'https://yandex.ru';
-    }
 
 </script>
 </body>

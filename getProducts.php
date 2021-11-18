@@ -6,7 +6,7 @@ $vendors = $db->getRowsInDb('vendors');
 $typeOfProducts = $db->getRowsInDb('type_of_products');
 for ($i = 0; $i < count($result); $i++) {
     foreach ($vendors as $v) {
-        if ($v['id'] == $result[$i]['product_type_id']) {
+        if ($v['id'] == $result[$i]['vendor_type_id']) {
             $result[$i]['vendor_name'] = $v['name'];
         }
     }
@@ -15,8 +15,7 @@ for ($i = 0; $i < count($result); $i++) {
             $result[$i]['product_type_name'] = $t['name'];
         }
     }
-    $result[$i]['rate'] = $db->getMiddleRate($result[$i]['id']);
+    $result[$i]['rate'] = round($db->getMiddleRate($result[$i]['id']), 2);
 }
-var_dump($result);
-//echo json_encode($result);
+echo json_encode($result);
 ?>

@@ -37,6 +37,13 @@ if (!isset($_GET['id'])) {
             </div>
             <?
         }
+        if (!empty($_SESSION) && $_SESSION['role'] == 0) {
+            ?>
+            <div class="edit-info">
+                <a href="/edit-item.php?id=<?=$item['id'];?>">изменить инфо</a>
+            </div>
+            <?
+        }
         ?>
     </div>
     <div class="item-info-under-block">
@@ -46,34 +53,36 @@ if (!isset($_GET['id'])) {
     </div>
 </div>
 <script>
-    var productId = $('#product-id').text();
-    $.ajax({
-        method: "POST",
-        url: "newRate.php",
-        data: {productId: productId},
-        success(data) {
-            json = JSON.parse(data);
-            $('.rating').each(function (obj, elem) {
-                if ($(this).text() === json) {
-                    $(this).addClass('rate-clicked');
-                }
-            })
-        }
-    })
-    $('.rating').on('click', function () {
-        var item = $(this);
-        var rate = item.text();
+    if ($('.rate').length) {
+        var productId = $('#product-id').text();
         $.ajax({
             method: "POST",
             url: "newRate.php",
-            data: {rate: rate, productId: productId},
+            data: {productId: productId},
             success(data) {
-                $('.rating').removeClass('rate-clicked');
-                item.addClass('rate-clicked');
+                json = JSON.parse(data);
+                $('.rating').each(function () {
+                    if ($(this).text() === json) {
+                        $(this).addClass('rate-clicked');
+                    }
+                })
             }
         })
-        console.log($(this).text());
-    })
+        $('.rating').on('click', function () {
+            var item = $(this);
+            var rate = item.text();
+            $.ajax({
+                method: "POST",
+                url: "newRate.php",
+                data: {rate: rate, productId: productId},
+                success(data) {
+                    $('.rating').removeClass('rate-clicked');
+                    item.addClass('rate-clicked');
+                }
+            })
+            console.log($(this).text());
+        })
+    }
 </script>
 </body>
 </html>
