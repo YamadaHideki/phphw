@@ -23,6 +23,7 @@ require_once('dbController.php');
 
     function sessionInfo($db, $username, $pwd) {
         if ($result = $db->login($username, $pwd)) {
+            $_SESSION['user_id'] = $result['id'];
             $_SESSION['username'] = $result['username'];
             $_SESSION['role'] = $result['role'];
         }

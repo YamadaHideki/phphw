@@ -93,6 +93,46 @@ class dbController {
         }
     }
 
+    public function getRate ($user_id, $product_id) {
+        try {
+            $query = $this->PDO->prepare("SELECT * FROM rating WHERE user_id = ? AND product_id = ?");
+            $query->execute([$user_id, $product_id]);
+            if ($row = $query->fetch()) {
+                return $row;
+            }
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
+    public function getMiddleRate ($product_id) {
+        try {
+            $query = $this->PDO->prepare("SELECT AVG(rate) FROM rating WHERE product_id = ?");
+            $query->execute([$product_id]);
+            if ($row = $query->fetch()) {
+                return $row['AVG(rate)'];
+            }
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
+    public function addNewRate ($user_id, $product_id, $rate) {
+        try {
+            $query = $this->PDO->prepare("SELECT id FROM rating WHERE user_id = ? AND product_id = ?");
+            $query->execute([$user_id, $product_id]);
+            if ($row = $this->getRate($user_id, $product_id)) {
+                $update = $this->PDO->prepare("UPDATE rating SET user_id = ?, product_id = ?, rate = ? WHERE id = ?");
+                $update->execute([$user_id, $product_id, $rate, $row['id']]);
+            } else {
+                $insert = $this->PDO->prepare("INSERT INTO rating (user_id, product_id, rate) VALUES (?, ?, ?)");
+                $insert->execute([$user_id, $product_id, $rate]);
+            }
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
     public function __destruct() {
         $this->PDO = null;
     }

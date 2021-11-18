@@ -97,7 +97,10 @@ $result = $db->getRowsInDb("products");
             result += "<div class='item-title'>"+ data[i].title +"</div>";
             //result += "<div class='description'>"+ data[i].description +"</div>";
             result += "<div class='item-vendor' hidden>"+ data[i].vendor_type_id +"</div>";
-            result += "<div class='item-price'>"+ data[i].price +" руб.</div>";
+            result += "<div class='item-r-options'>";
+            result += "<div class='item-price'>"+ data[i].price + " руб.</div>";
+            result += "<div class='item-rate'>"+ data[i].rate + "</div>";
+            result += "</div>";
             result += "</div></a>";
         }
         items.innerHTML = result;
