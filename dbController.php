@@ -65,6 +65,34 @@ class dbController {
         }
     }
 
+    public function getFormTableToId($table, $id) {
+        try {
+            $query = $this->PDO->prepare("SELECT name FROM $table WHERE id = ?");
+            $query->execute([$id]);
+            if ($row = $query->fetch()) {
+                return $row['name'];
+            }
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
+    public function getItem($id) {
+        try {
+            $result = array();
+            $query = $this->PDO->prepare("SELECT * FROM products WHERE id = ?");
+            $query->execute([$id]);
+            if ($row = $query->fetch()) {
+                $result = $row;
+                $result['vendor'] = self::getFormTableToId("vendors", $row['vendor_type_id']);
+                $result['type_of_product'] = self::getFormTableToId("type_of_products", $row['product_type_id']);
+                return $result;
+            }
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+        }
+    }
+
     public function __destruct() {
         $this->PDO = null;
     }
