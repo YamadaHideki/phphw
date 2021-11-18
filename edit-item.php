@@ -1,7 +1,7 @@
 <?
 require_once('theme.php');
 require_once('dbController.php');
-if(isset($_SESSION) && $_SESSION['role'] == 0 && isset($_GET['id'])) {
+if(!empty($_SESSION) && $_SESSION['role'] == 0 && isset($_GET['id'])) {
     $db = new dbController();
     $row = $db->getItem((int) $_GET['id']);
 } else {
